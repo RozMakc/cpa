@@ -13,6 +13,10 @@ use Inertia\Inertia;
 
 class HomeController extends Controller
 {
+    public function activation(){
+        return Inertia::render('Activation');
+    }
+
     public function dashboard(){
         $users_count = 0;
         $offers_count = Offer::count();
@@ -38,6 +42,7 @@ class HomeController extends Controller
             ->get();
 
         }else{
+            
             $leads = Lead::with(['offer', 'link'])->orderBy('created_at', 'desc')
             ->where('user_id', Auth::user()->id)
             ->paginate(10);

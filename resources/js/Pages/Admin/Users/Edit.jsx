@@ -12,7 +12,7 @@ import {
 } from '@/icons'
 import DatePicker from '@/Components/DatePicker';
 
-export default function Create({user, documents}) {
+export default function Create({user}) {
 
     
     const { data, setData, patch, processing, errors, reset } = useForm({
@@ -27,13 +27,18 @@ export default function Create({user, documents}) {
         is_active: user.is_active,
         is_stopped: user.is_stopped,
         documents: {
-            inn: documents?.inn || '',
-            pasport_birthplace: documents?.pasport_birthplace || '',
-            pasport_series: documents?.pasport_series || '',
-            pasport_number: documents?.pasport_number || '',
-            pasport_who: documents?.pasport_who || '',
-            pasport_when: documents?.pasport_when || '',
-            pasport_code: documents?.pasport_code || ''
+            inn: user.documents?.inn || '',
+            pasport_birthplace: user.documents?.pasport_birthplace || '',
+            pasport_series: user.documents?.pasport_series || '',
+            pasport_number: user.documents?.pasport_number || '',
+            pasport_who: user.documents?.pasport_who || '',
+            pasport_when: user.documents?.pasport_when || '',
+            pasport_code: user.documents?.pasport_code || ''
+        },
+        payment_method: {
+            bank_name: user.paymethods?.bank_name || '',
+            bank_bik: user.paymethods?.bank_bik || '',
+            bank_rs: user.paymethods?.bank_rs || '',
         }
     });
     const submit = (e) => {
@@ -95,7 +100,7 @@ export default function Create({user, documents}) {
 
                             <div>
                                 <InputLabel>
-                                    ФИО <span className="text-error-500">*</span>{" "}
+                                    ФИО
                                 </InputLabel>
                                 <TextInput
                                         id="fullname"
@@ -112,9 +117,6 @@ export default function Create({user, documents}) {
                             </div>
 
                             <div>
-                                <InputLabel>
-                                    Логин <span className="text-error-500">*</span>{" "}
-                                </InputLabel>
                                 <DatePicker
                                     id="birthdate"
                                     label="Дата рождения"
@@ -123,8 +125,8 @@ export default function Create({user, documents}) {
                                     defaultDate={data.birthdate}
                                     onChange={(e) => setData('birthdate', e[0])}
                                 />
-                                {errors[`name`] && (
-                                    <p className="text-red-500 text-sm mt-1">Необходимо указать name</p>
+                                {errors[`birthdate`] && (
+                                    <p className="text-red-500 text-sm mt-1">Необходимо указать дату рождения</p>
                                 )}
                             </div>
 
@@ -185,7 +187,23 @@ export default function Create({user, documents}) {
                         </div>
 
                         <div className="space-y-3">
-
+                        <div>
+                                <InputLabel>
+                                    Баланс
+                                </InputLabel>
+                                <TextInput
+                                        id="balance"
+                                        type="text"
+                                        name="balance"
+                                        value={data.balance}
+                                        className="mt-1 block w-full"
+                                        isFocused={true}
+                                        onChange={(e) => setData('balance', e.target.value)}
+                                    />
+                                {errors[`balance`] && (
+                                    <p className="text-red-500 text-sm mt-1">Необходимо указать balance</p>
+                                )}
+                            </div>
                             <div>
                                 <InputLabel>
                                     Роль <span className="text-error-500">*</span>{" "}
@@ -238,8 +256,8 @@ export default function Create({user, documents}) {
                                     className="h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pr-11 text-sm shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800"
                                     disabled={processing}
                                 >
-                                    <option  value={1}>Активен</option>
-                                    <option  value={0}>Остановлен</option>
+                                    <option  value={0}>Активен</option>
+                                    <option  value={1}>Остановлен</option>
                                 </select>
                             </div>
 
@@ -354,12 +372,62 @@ export default function Create({user, documents}) {
                                                 onChange={(e) => setData('documents.inn', e.target.value)}
                                             />
                                         </div>
+
+                                        <div>
+                                    <InputLabel>Банк</InputLabel>
+                                    <TextInput
+                                        id="bank_name"
+                                        type="text"
+                                        name="bank_name"
+                                        value={data.payment_method.bank_name}
+                                        className="mt-1 block w-full"
+                                        isFocused={true}
+                                        onChange={(e) => setData('payment_method.bank_name', e.target.value)}
+                                    />
+                                    {errors[`payment_method.bank_name`] && (
+                                    <p className="text-red-500 text-sm mt-1">Необходимо указать Место рождения</p>
+                                    )}
+                                </div>
+
+                                <div>
+                                    <InputLabel>БИК Банка</InputLabel>
+                                    <TextInput
+                                        id="bank_bik"
+                                        type="text"
+                                        name="bank_bik"
+                                        value={data.payment_method.bank_bik}
+                                        className="mt-1 block w-full"
+                                        isFocused={true}
+                                        onChange={(e) => setData('payment_method.bank_bik', e.target.value)}
+                                    />
+                                    {errors[`payment_method.bank_bik`] && (
+                                    <p className="text-red-500 text-sm mt-1">Необходимо указать bank_bik</p>
+                                    )}
+                                </div>
+
+                                <div>
+                                    <InputLabel>Расчетный счет</InputLabel>
+                                    <TextInput
+                                        id="bank_rs"
+                                        type="text"
+                                        name="bank_rs"
+                                        value={data.payment_method.bank_rs}
+                                        className="mt-1 block w-full"
+                                        isFocused={true}
+                                        onChange={(e) => setData('payment_method.bank_rs', e.target.value)}
+                                    />
+                                    {errors[`payment_method.bank_rs`] && (
+                                    <p className="text-red-500 text-sm mt-1">Необходимо указать bank_rs</p>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             
+
+
             <div className="mt-5 flex flex-col gap-3 sm:flex-row justify-end">
                 <div>
                 <PrimaryButton disabled={processing}>

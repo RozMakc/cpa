@@ -142,7 +142,12 @@ class LinkController extends Controller
 
     public function redirect($uuid)
     {
-        $link = Link::where('uuid', $uuid)->firstOrFail();
+        $link = Link::with('user')->where('uuid', $uuid)->firstOrFail();
+
+        if($link->user->is_stopped == 1){
+            return redirect()->away(env('APP_URL'));
+        }
+
         $link->incrementClickCount();
 
         $traffic = new Traffic();

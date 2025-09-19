@@ -32,10 +32,10 @@ export default function SignUpForm() {
         <div>
           <div className="mb-5 sm:mb-8">
             <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
-              Sign Up
+              Регистрация
             </h1>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Enter your email and password to sign up!
+              Заполните форму чтобы зарегистрироваться
             </p>
           </div>
           <div>
@@ -45,7 +45,7 @@ export default function SignUpForm() {
                   {/* <!-- First Name --> */}
                   <div className="sm:col-span-1">
                     <InputLabel>
-                      First Name<span className="text-error-500">*</span>
+                      Логин<span className="text-error-500">*</span>
                     </InputLabel>
                     <TextInput
                       type="text"
@@ -81,7 +81,7 @@ export default function SignUpForm() {
 
                 <div>
                   <InputLabel>
-                  Phone<span className="text-error-500">*</span>
+                  Телефон<span className="text-error-500">*</span>
                   </InputLabel>
                   <TextInput
                     type="text"
@@ -101,7 +101,7 @@ export default function SignUpForm() {
                 {/* <!-- Password --> */}
                 <div>
                   <InputLabel>
-                    Password<span className="text-error-500">*</span>
+                    Пароль<span className="text-error-500">*</span>
                   </InputLabel>
                   <div className="relative">
                     <TextInput
@@ -129,7 +129,7 @@ export default function SignUpForm() {
 
                 <div>
                   <InputLabel>
-                  Confirm Password<span className="text-error-500">*</span>
+                  Повторите пароль<span className="text-error-500">*</span>
                   </InputLabel>
                   <div className="relative">
                     <TextInput
@@ -160,20 +160,20 @@ export default function SignUpForm() {
                     onChange={setIsChecked}
                   />
                   <p className="inline-block font-normal text-gray-500 dark:text-gray-400">
-                    By creating an account means you agree to the{" "}
+                    Создавая аккаунт я соглашаюсь с{" "}
                     <span className="text-gray-800 dark:text-white/90">
-                      Terms and Conditions,
+                      парвилами и условиями,
                     </span>{" "}
-                    and our{" "}
+                    и {" "}
                     <span className="text-gray-800 dark:text-white">
-                      Privacy Policy
+                      Политикой приватности
                     </span>
                   </p>
                 </div>
                 {/* <!-- Button --> */}
                 <div>
                   <button className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600">
-                    Sign Up
+                    Регистрация
                   </button>
                 </div>
               </div>
@@ -181,12 +181,12 @@ export default function SignUpForm() {
 
             <div className="mt-5">
               <p className="text-sm font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start">
-                Already have an account? {""}
+                Уже есть аккаунт? {""}
                 <Link
                   href={route('login')}
                   className="text-brand-500 hover:text-brand-600 dark:text-brand-400"
                 >
-                  Sign In
+                  Войти
                 </Link>
               </p>
             </div>

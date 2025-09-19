@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Lead;
 use App\Models\Offer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class LeadController extends Controller
@@ -15,18 +16,34 @@ class LeadController extends Controller
     public function index(Request $request)
     {
         $leads = Lead::with(['offer', 'user', 'link'])
+            ->when(!auth()->user()->hasRole('admin'), function($query) {
+                $query->where('user_id', auth()->id());
+            })
             ->latest()
             ->paginate(50);
+
+        $stats = [
+            'total' => Lead::when(!auth()->user()->hasRole('admin'), function($query) {
+                $query->where('user_id', auth()->id());
+            })->count(),
+            'new' => Lead::when(!auth()->user()->hasRole('admin'), function($query) {
+                $query->where('user_id', auth()->id());
+            })->new()->count(),
+            'hold' => Lead::when(!auth()->user()->hasRole('admin'), function($query) {
+                $query->where('user_id', auth()->id());
+            })->hold()->count(),
+            'completed' => Lead::when(!auth()->user()->hasRole('admin'), function($query) {
+                $query->where('user_id', auth()->id());
+            })->completed()->count(),
+            'canceled' => Lead::when(!auth()->user()->hasRole('admin'), function($query) {
+                $query->where('user_id', auth()->id());
+            })->canceled()->count(),
+        ];
 
         return Inertia::render('Leads/Index', [
             'leads' => $leads,
             'filters' => $request->all(),
-            'stats' => [
-                'total' => Lead::count(),
-                'new' => Lead::new()->count(),
-                'hold' => Lead::hold()->count(),
-                'completed' => Lead::completed()->count(),
-            ]
+            'stats' => $stats
         ]);
     }
 

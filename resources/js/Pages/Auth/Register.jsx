@@ -5,7 +5,7 @@ import SignUpForm from './components/SignUpForm';
 export default function SignIn() {
   return (
     <GuestLayout>
-        <Head title="Sign Up" />
+        <Head title="Регистрация" />
         <SignUpForm/>
     </GuestLayout>
   );

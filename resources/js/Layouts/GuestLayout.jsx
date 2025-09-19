@@ -21,7 +21,9 @@ export default function GuestLayout({ children }) {
                   />
                 </Link>
                 <p className="text-center text-gray-400 dark:text-white/60">
-                  Free and Open-Source Tailwind CSS Admin Dashboard Template
+                  <span style={{ whiteSpace: "nowrap" }}>
+                  Эволюция в найме: умные решения для HR
+                  </span>
                 </p>
               </div>
             </div>

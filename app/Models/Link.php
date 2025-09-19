@@ -49,7 +49,7 @@ class Link extends Model
                 $model->uuid = $uuid;
             }
             if (empty($model->base_url)) {
-                $model->base_url = env('APP_URL') . '/goto/' . $model->uuid;
+                $model->base_url = config('app.url') . '/goto/' . $model->uuid;
             }
         });
     }
@@ -90,12 +90,10 @@ class Link extends Model
 
         // Добавляем UTM-метки
         $utmParams = [
-            'utm_source' => $this->utm_source,
-            'utm_medium' => $this->utm_medium,
-            'utm_campaign' => $this->utm_campaign,
-            'utm_term' => $this->utm_term,
-            'utm_content' => $this->utm_content,
+            'utm_source' => 'evoprod',
+            'utm_campaign' => $this->user_id .':'. $this->offer_id .':'. $this->id,
         ];
+
 
         foreach ($utmParams as $key => $value) {
             if (!empty($value)) {
@@ -119,7 +117,7 @@ class Link extends Model
         }
 
         // Добавляем UUID для отслеживания
-        $params['uuid'] = $this->uuid;
+        //$params['uuid'] = $this->uuid;
 
         if (!empty($params)) {
             $url .= (strpos($url, '?') === false) ? '?' : '&';

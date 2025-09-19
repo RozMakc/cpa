@@ -17,7 +17,6 @@ import { useRoles } from '@/hooks/useRoles';
 
 export default function Index({users}) {
   const [processing, setProcessing] = useState(null);
-  const { hasRole, hasAnyRole } = useRoles()
 
   const deleteUser = (user_id) => {
       if (!confirm('Вы уверены, что хотите удалить пользователя?')) {
@@ -30,6 +29,7 @@ export default function Index({users}) {
           preserveScroll: true
       });
   };
+
 
   return (
     <AuthenticatedLayout
@@ -109,8 +109,8 @@ export default function Index({users}) {
 
           {/* Table Body */}
           <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-            {users.length > 0 ? 
-            users.map((user) => (
+            {users.total > 0 ? 
+            users.data.map((user) => (
               <TableRow key={user.id}>
                 <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                   {user.id}
@@ -125,7 +125,7 @@ export default function Index({users}) {
                   {user.email}
                 </TableCell>
                 <TableCell className="px-5 py-3 text-gray-500 text-sm dark:text-gray-400">
-                  {user.roles[0].name}
+                  {user.roles[0]?.name}
                 </TableCell>
 
                 <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
@@ -146,11 +146,11 @@ export default function Index({users}) {
                     size="sm"
                     color={
                       user.is_stopped
-                        ? "success"
-                        : "error"
+                        ? "error"
+                        : "success"
                     }
                   >
-                    {user.is_stopped ? 'Активен' : 'Остановлен'}
+                    {user.is_stopped ? 'Остановлен' : 'Активен'}
                   </Badge>
                 </TableCell>
 
@@ -180,7 +180,7 @@ export default function Index({users}) {
               </TableRow>
             )): (
               <TableRow>
-                <TableCell className="px-5 py-3 text-center text-gray-500 text-theme-sm dark:text-gray-400" colspan={6}>
+                <TableCell className="px-5 py-3 text-center text-gray-500 text-theme-sm dark:text-gray-400" colSpan={8}>
                   Not found
                 </TableCell>
               </TableRow>

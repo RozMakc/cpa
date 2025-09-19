@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "@inertiajs/react";
-import { ShoppingBag, LayoutGrid, LinkIcon, ShoppingBasket, Users, MenuIcon} from "lucide-react";
+import { ShoppingBag, LayoutGrid, LinkIcon, ShoppingBasket, Users, MenuIcon, Braces, TableOfContents} from "lucide-react";
 
 import { useSidebar } from "@/context/SidebarContext";
 import { useRoles } from "@/hooks/useRoles";
@@ -40,6 +40,13 @@ const AppSidebar = () => {
       name: "Ссылки",
       path: "/link",
     },
+    /*
+    {
+      icon: <LinkIcon />,
+      name: "Выплаты",
+      path: "/payments",
+    },
+    */
   ];
 
   if(hasRole('admin')){
@@ -63,6 +70,16 @@ const AppSidebar = () => {
         icon: <Users />,
         name: "Пользователи",
         path: "/users",
+      },
+      {
+        icon: <Braces />,
+        name: "Интеграции",
+        path: "/integration",
+      },
+      {
+        icon: <TableOfContents />,
+        name: "Категории",
+        path: "/offerCategory",
       },
     ];
   }

@@ -17,7 +17,7 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'fullname' => 'required|string|max:255',
+            'fullname' => 'sometimes|nullable|string|max:255',
             'phone' => 'sometimes|nullable|string|max:255',
             'email' => [
                 'required',
@@ -26,20 +26,24 @@ class UpdateUserRequest extends FormRequest
                 'max:255',
                 Rule::unique('users')->ignore($this->user->id)
             ],
-            'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+            'password' => ['sometimes','nullable', Rules\Password::defaults()],
             'role' => 'string|exists:roles,name',
             'is_active' => 'bool',
             'is_stopped' => 'bool',
             'balance' => 'numeric',
-            'birthdate' => 'date',
-            'documents' => 'array',
-            'documents.inn' => 'nullable|string|max:20',
-            'documents.pasport_birthplace' => 'nullable|string|max:255',
-            'documents.pasport_series' => 'nullable|string|max:10',
-            'documents.pasport_number' => 'nullable|string|max:20',
-            'documents.pasport_who' => 'nullable|string|max:255',
-            'documents.pasport_when' => 'nullable|date',
-            'documents.pasport_code' => 'nullable|string|max:10'
+            'birthdate' => 'sometimes|nullable||date',
+            'documents' => 'sometimes|nullable|array',
+            'documents.inn' => 'sometimes|nullable|string|max:20',
+            'documents.pasport_birthplace' => 'sometimes|nullable|string|max:255',
+            'documents.pasport_series' => 'sometimes|nullable|string|max:10',
+            'documents.pasport_number' => 'sometimes|nullable|string|max:20',
+            'documents.pasport_who' => 'sometimes|nullable|string|max:255',
+            'documents.pasport_when' => 'sometimes|nullable|date',
+            'documents.pasport_code' => 'sometimes|nullable|string|max:10',
+            'payment_method' => 'sometimes|nullable|array',
+            'payment_method.bank_name' => 'sometimes|nullable|string|max:20',
+            'payment_method.bank_bik' => 'sometimes|nullable|string|min:5',
+            'payment_method.bank_rs' => 'sometimes|nullable|string|min:10'
         ];
     }
 }

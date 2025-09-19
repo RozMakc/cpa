@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Country;
+use App\Models\Integration;
 use App\Models\Lead;
+use App\Models\Link;
 use App\Models\Offer;
 use App\Models\OfferLink;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class LeadController extends Controller
@@ -24,6 +27,122 @@ class LeadController extends Controller
                 'per_page' => $leads->perPage(),
             ]
         ]);
+    }
+
+    public function postback(Request $request, $resource)
+    {
+        Log::info($resource);
+        Log::info($request->all());
+
+        $apikey = $request->apikey;
+        $integration = Integration::where('name', $resource)->where('apikey', $apikey)->first();
+
+        if(!$integration){
+            return response()->json(['status' => 'error', 'message' => 'Wrong ApiKey!']);
+        }
+
+        $data = explode(':', $request->utm_campaign);
+        //if(count($data) < 3){
+        //    return response()->json(['status' => 'error']);
+        //}
+
+
+        $offer_id = isset($data[1]) ? $data[1] : null;
+        $link_id = isset($data[2]) ? $data[2] : null;
+        $user_id = (isset($data[0]) && $data[0] != '') ? $data[0] : null;
+        $sub1 = null;
+        $sub2 = null;
+        $sub3 = null;
+        $sub4 = null;
+        $sub5 = null;
+
+        if($link_id || $offer_id){
+            $link = Link::where('user_id', $user_id)->where('id', $link_id)->first();
+            if($link){
+                $offer = Offer::findOrFail($link->offer_id);
+            }else{
+                $offer = Offer::findOrFail($offer_id);
+            }
+        }
+
+
+        $country_req = $request->citizenship == 'РФ' ? 'RU' : $request->citizenship;
+
+        $money=0;
+
+        if(!isset($offer)){
+            $offer = Offer::first();
+        }
+
+
+        if(isset($offer) && $country_req){
+            $offer_id = $offer->id;
+            $country = Country::where('iso_name', $country_req)->first();
+            if($country){
+                $price = $offer->prices()->where('country_id', $country->id)->first();             
+            }
+        }
+        if(isset($offer) && !$price){
+            $price = $offer->prices()->where('country_id', 'RU')->first();
+            if(!isset($price)){
+                $price = $offer->prices()->first();
+            }
+        }
+
+        if(isset($price)){
+            $money = $price->price;
+        }
+
+        if(isset($link)){
+            $sub1 = $link->sub1;
+            $sub2 = $link->sub2;
+            $sub3 = $link->sub3;
+            $sub4 = $link->sub4;
+            $sub5 = $link->sub5;
+        }
+        
+        try {
+            $name = $request->lastname ? $request->lastname : 'клиент';
+            $name .= $request->firstname ? ' '.$request->firstname : '';
+
+            $lead = Lead::create([
+                'name' => $name,
+                'firstname' =>  $request->firstname ? $request->firstname : '',
+                'lastname' =>  $request->lastname ? $request->lastname : '',
+                'gender' =>  $request->gender ? $request->gender : '',
+                'birthday' =>  $request->birthday ? $request->birthday : '',
+                'address' =>  $request->address ? $request->address : '',
+                'citizenship' => $request->citizenship ? $request->citizenship : '',
+                'email' => $request->email ? $request->email : '',
+                'phone' => $request->phone ? $request->phone : '',
+                'user_id' =>$user_id,
+                'offer_id' => $offer_id,
+                'sub1' =>$sub1,
+                'sub2' =>$sub2,
+                'sub3' =>$sub3,
+                'sub4' =>$sub4,
+                'sub5' =>$sub5,
+                'utm_source' =>$request->utm_source,
+                'utm_medium' =>$request->utm_medium,
+                'utm_campaign' =>$request->utm_campaign,
+                'utm_term' =>$request->utm_term,
+                'utm_content' =>$request->utm_content,
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'price' => $money
+            ]);
+
+            return response()->json([
+                'data' => $lead,
+                'message' => 'Lead created successfully'
+            ], 201);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Failed to create lead',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function store(Request $request)

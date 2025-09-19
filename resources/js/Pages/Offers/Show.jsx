@@ -25,7 +25,7 @@ export default function Show({ offer }) {
                             <div className="flex gap-5 justify-between">
                                 <div className="flex-grow space-y-3">
                                     <div>Категория: {offer.category.name}</div>
-                                    <div>Описание:<br/>{offer.description}</div>
+                                    
                                 </div>
                                 <div className="w-1/3">
                                     <img
@@ -33,7 +33,10 @@ export default function Show({ offer }) {
                                         alt={offer.name}
                                     />
                                 </div>
+                                
                             </div>
+
+                            <div className='whitespace-pre-wrap mt-5'>Описание:<br/><br/>{offer.description}</div>
 
                             <div className="mt-5">
                                 <Link href={route('offer.link.create', offer.id)}>
@@ -56,7 +59,7 @@ export default function Show({ offer }) {
                                         {price.country && (
                                             <img
                                                 width={"30px"}
-                                                src={`/images/country/${price.country.iso_name}.png`}
+                                                src={`/images/country/${(price.country.iso_name).toLowerCase()}.png`}
                                                 alt={price.country.iso_name}
                                             />
                                         )}

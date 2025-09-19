@@ -77,6 +77,11 @@ class User extends Authenticatable
         return $this->hasOne(UserDocument::class);
     }
 
+    public function paymethods(): HasOne
+    {
+        return $this->hasOne(PaymentMethod::class);
+    }
+
     public function isActive(): bool
     {
         return $this->is_active;

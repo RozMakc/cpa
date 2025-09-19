@@ -7,7 +7,6 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Role;
@@ -19,9 +18,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('roles')->get();
+       $users = User::with('roles')->orderByDesc('id')->paginate(20);
+
 
         $roles = Role::all();
+
         return Inertia::render('Admin/Users/Index', [
             'users' => $users,
             'roles' => $roles,
@@ -74,12 +75,11 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $user->load(['roles']);
+        $user->load(['roles', 'documents', 'paymethods']);
         $roles = Role::all();
 
         return Inertia::render('Admin/Users/Edit', [
             'user' => $user,
-            'documents' => $user->documents()->first(),
             'roles' => $roles,
         ]);
     }
@@ -92,9 +92,16 @@ class UserController extends Controller
         $validated = $request->validated();
 
         $userData = Arr::except($validated, ['documents', 'password', 'role']);
+        if (!empty($validated['password'])) {
+            $userData['password'] = Hash::make($validated['password']);
+        }
 
         $user->update($userData);
-        
+
+        if ($request->has('role')) {
+            $user->syncRoles($request->role);
+        }
+
         if (isset($validated['documents'])) {
             $user->documents()->updateOrCreate(
                 ['user_id' => $user->id],
@@ -102,15 +109,13 @@ class UserController extends Controller
             );
         }
 
-        if ($request->filled('password')) {
-            $user->update([
-                'password' => Hash::make($validated['password']),
-            ]);
+        if (isset($validated['payment_method'])) {
+            $user->paymethods()->updateOrCreate(
+                ['user_id' => $user->id],
+                $validated['payment_method']
+            );
         }
 
-        if ($request->has('role')) {
-            $user->syncRoles($request->role);
-        }
 
         return redirect()->back()
             ->with('success', 'Пользователь успешно обновлен.');

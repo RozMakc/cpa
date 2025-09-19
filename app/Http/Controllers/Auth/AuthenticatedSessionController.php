@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use Illuminate\Validation\ValidationException;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,14 +29,36 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
-    {
-        $request->authenticate();
+     public function store(LoginRequest $request): RedirectResponse
+{
+    $credentials = $request->only('email', 'password');
 
-        $request->session()->regenerate();
-
-        return redirect()->intended(route('dashboard', absolute: false));
+    // Проверяем активацию ДО попытки логина
+    $user = User::where('email', $credentials['email'] ?? '')->first();
+    if ($user && ! $user->is_active) {
+        throw ValidationException::withMessages([
+            'email' => 'Аккаунт ещё не активирован. Дождитесь подтверждения администратора.',
+        ]);
     }
+
+    // Пытаемся войти
+    if (! Auth::attempt($credentials, $request->boolean('remember'))) {
+        throw ValidationException::withMessages([
+            'email' => __('auth.failed'),
+        ]);
+    }
+
+    $request->session()->regenerate();
+
+    // Если маршрута 'dashboard' нет — редиректим на главную
+    try {
+        return redirect()->intended(route('dashboard', absolute: false));
+    } catch (\Throwable $e) {
+        return redirect()->intended('/');
+    }
+}
+
+
 
     /**
      * Destroy an authenticated session.

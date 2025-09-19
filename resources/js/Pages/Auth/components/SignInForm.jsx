@@ -32,11 +32,8 @@ export default function SignInForm() {
         <div>
           <div className="mb-5 sm:mb-8">
             <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
-              Sign In
+              Войти
             </h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Enter your email and password to sign in!
-            </p>
           </div>
           <div>
             <form onSubmit={submit}>
@@ -52,7 +49,7 @@ export default function SignInForm() {
                         value={data.email}
                         className="mt-1 block w-full"
                         autoComplete="username"
-                        placeholder="info@gmail.com"
+                        placeholder="Email"
                         isFocused={true}
                         onChange={(e) => setData('email', e.target.value)}
                     />
@@ -62,7 +59,7 @@ export default function SignInForm() {
                 </div>
                 <div>
                   <InputLabel>
-                    Password <span className="text-error-500">*</span>{" "}
+                    Пароль <span className="text-error-500">*</span>{" "}
                   </InputLabel>
                   <div className="relative">
                     <TextInput
@@ -71,7 +68,7 @@ export default function SignInForm() {
                         name="password"
                         value={data.password}
                         className="mt-1 block w-full"
-                        placeholder="Enter your password"
+                        placeholder="Пароль"
                         onChange={(e) => setData('password', e.target.value)}
                     />
 
@@ -94,19 +91,19 @@ export default function SignInForm() {
                   <div className="flex items-center gap-3">
                     <Checkbox checked={data.remember} onChange={(e) => setData('remember', e.target.checked)} />
                     <span className="block font-normal text-gray-700 text-theme-sm dark:text-gray-400">
-                      Remember me
+                      Запомнить меня
                     </span>
                   </div>
                   <Link
-                    href={route('register')}
+                    href={route('password.request')}
                     className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
                   >
-                    Forgot password?
+                    Забыли пароль?
                   </Link>
                 </div>
                 <div>
                   <PrimaryButton className="w-full" size="sm">
-                    Sign in
+                    Войти
                   </PrimaryButton>
                 </div>
               </div>
@@ -114,12 +111,12 @@ export default function SignInForm() {
 
             <div className="mt-5">
               <p className="text-sm font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start">
-                Don&apos;t have an account? {""}
+                У Вас еще нет аккаунта? {""}
                 <Link
                   href={route('register')}
                   className="text-brand-500 hover:text-brand-600 dark:text-brand-400"
                 >
-                  Sign Up
+                  Создайте аккаунт
                 </Link>
               </p>
             </div>

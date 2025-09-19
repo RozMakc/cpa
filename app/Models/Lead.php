@@ -18,12 +18,22 @@ class Lead extends Model
         'link_id',
         'offer_link_id',
         'name',
+        'firstname',
+        'lastname',
+        'gender',
+        'birthday',
+        'address',
+        'citizenship',
+        'citizenship',
+        'citizenship',
+        'citizenship',
         'email',
         'phone',
         'comment',
         'status',
         'type',
         'price',
+        'comment',
         'currency',
         'products',
         'utm_source',
@@ -105,6 +115,11 @@ class Lead extends Model
     public function scopeCompleted($query)
     {
         return $query->where('status', 'completed');
+    }
+
+    public function scopeCanceled($query)
+    {
+        return $query->where('status', 'canceled');
     }
 
     public function scopeToday($query)

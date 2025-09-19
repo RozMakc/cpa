@@ -51,7 +51,7 @@ class OfferController extends Controller
             'prices' => 'required|array',
             'prices.*.country_id' => 'sometimes|nullable|exists:countries,id',
             'prices.*.price' => 'required|numeric|min:0',
-            'image' => 'sometimes|nullable|image'
+            'image' => 'sometimes|nullable|mimes:jpg,jpeg,png,svg'
         ]);
 
         DB::transaction(function () use ($validated, $request) {

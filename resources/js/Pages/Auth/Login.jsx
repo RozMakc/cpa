@@ -5,7 +5,7 @@ import SignInForm from "./components/SignInForm";
 export default function SignIn() {
   return (
     <GuestLayout>
-        <Head title="Sign In" />
+        <Head title="Авторизация" />
         <SignInForm />
     </GuestLayout>
   );

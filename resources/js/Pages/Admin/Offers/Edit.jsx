@@ -7,7 +7,8 @@ import { Head, Link, useForm } from '@inertiajs/react';
 import { TrashBinIcon, PlusIcon } from '@/icons';
 
 export default function Edit({ offer, categories, countries }) {
-    const { data, setData, put, processing, errors, reset } = useForm({
+    const { data, setData, post, processing, errors, reset } = useForm({
+        _method: 'PUT',
         name: offer.name || '',
         description: offer.description || '',
         category_id: offer.category_id || '',
@@ -15,10 +16,10 @@ export default function Edit({ offer, categories, countries }) {
         links: offer.links?.length > 0 ? offer.links.map(link => link.url) : [''],
         image: null
     });
-    console.log(data.prices)
+    
     const submit = (e) => {
         e.preventDefault();
-        put(route('offer.update', offer.id));
+        post(route('offer.update', offer.id));
     };
 
     return (

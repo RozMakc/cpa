@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\OfferCategory;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class OfferCategoryController extends Controller
 {
@@ -12,7 +13,10 @@ class OfferCategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categories = OfferCategory::all();
+        return Inertia::render('Admin/Categories/Index', [
+            'categories' => $categories,
+        ]);
     }
 
     /**
@@ -20,7 +24,7 @@ class OfferCategoryController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Admin/Categories/Create');
     }
 
     /**
@@ -28,7 +32,17 @@ class OfferCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string',
+        ]);
+
+        $category = new OfferCategory();
+        $category->name = $validated['name'];
+        $category->save();
+
+        
+        return redirect()->route('offerCategory.index')
+            ->with('success', 'Offer created successfully.');
     }
 
     /**
@@ -36,7 +50,9 @@ class OfferCategoryController extends Controller
      */
     public function show(OfferCategory $offerCategory)
     {
-        //
+        return Inertia::render('Admin/Categories/Edit', [
+            'category' => $offerCategory,
+        ]);
     }
 
     /**
@@ -44,7 +60,9 @@ class OfferCategoryController extends Controller
      */
     public function edit(OfferCategory $offerCategory)
     {
-        //
+        return Inertia::render('Admin/Categories/Edit', [
+            'category' => $offerCategory,
+        ]);
     }
 
     /**
@@ -52,7 +70,14 @@ class OfferCategoryController extends Controller
      */
     public function update(Request $request, OfferCategory $offerCategory)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string',
+        ]);
+
+        $offerCategory->name = $validated['name'];
+        $offerCategory->save();
+        return redirect()->route('offerCategory.index')
+            ->with('success', 'Offer created successfully.');
     }
 
     /**
@@ -60,6 +85,7 @@ class OfferCategoryController extends Controller
      */
     public function destroy(OfferCategory $offerCategory)
     {
-        //
+        $offerCategory->delete();
+        return redirect()->back();
     }
 }

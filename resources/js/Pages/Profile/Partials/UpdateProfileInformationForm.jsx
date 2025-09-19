@@ -1,3 +1,4 @@
+import DatePicker from '@/Components/DatePicker';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
@@ -15,8 +16,10 @@ export default function UpdateProfileInformation({
     const { data, setData, patch, errors, processing, recentlySuccessful } =
         useForm({
             name: user.name,
+            fullname: user.fullname || '',
             email: user.email,
-            phone: user.phone
+            phone: user.phone,
+            birthdate: user.birthdate,
         });
 
     const submit = (e) => {
@@ -37,7 +40,7 @@ export default function UpdateProfileInformation({
             <div className="p-4 sm:p-6 dark:border-gray-800">
             <form onSubmit={submit} className="space-y-6">
                 <div>
-                    <InputLabel htmlFor="name" value="Имя" />
+                    <InputLabel htmlFor="name" value="Логин" />
 
                     <TextInput
                         id="name"
@@ -49,7 +52,39 @@ export default function UpdateProfileInformation({
                         autoComplete="name"
                     />
 
-                    <InputError className="mt-2" message={errors.name} />
+                    {errors[`name`] && (
+                        <p className="text-red-500 text-sm mt-1">Необходимо указать логин</p>
+                    )}
+                </div>
+                <div>
+                    <InputLabel>
+                        ФИО
+                    </InputLabel>
+                    <TextInput
+                            id="fullname"
+                            type="text"
+                            name="fullname"
+                            value={data.fullname}
+                            className="mt-1 block w-full"
+                            isFocused={true}
+                            onChange={(e) => setData('fullname', e.target.value)}
+                        />
+                    {errors[`fullname`] && (
+                        <p className="text-red-500 text-sm mt-1">Необходимо указать ФИО</p>
+                    )}
+                </div>
+                <div>
+                    <DatePicker
+                        id="birthdate"
+                        label="Дата рождения"
+                        placeholder="Выберите дату рождения"
+                        required
+                        defaultDate={data.birthdate}
+                        onChange={(e) => setData('birthdate', e[0])}
+                    />
+                    {errors[`birthdate`] && (
+                        <p className="text-red-500 text-sm mt-1">Необходимо указать дату рождения</p>
+                    )}
                 </div>
 
                 <div>

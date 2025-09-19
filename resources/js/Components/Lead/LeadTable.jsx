@@ -29,12 +29,22 @@ export default function LeadTable({ leads, filters }) {
               >
                 ID
               </TableCell>
+              {hasRole('admin') && (
+              <TableCell
+                isHeader
+                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+              >
+                Юзер
+              </TableCell>
+              )}
+              {hasRole('admin') && (
               <TableCell
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
                 Клиент
               </TableCell>
+              )}
               <TableCell
                 isHeader
                 className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
@@ -57,7 +67,7 @@ export default function LeadTable({ leads, filters }) {
                 isHeader
                 className=" px-5 py-3 font-medium text-gray-500 text-center text-theme-xs dark:text-gray-400"
               >
-                Стутус
+                Статус
               </TableCell>
               <TableCell
                 isHeader
@@ -76,10 +86,24 @@ export default function LeadTable({ leads, filters }) {
                 <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {lead.id}
                 </TableCell>
+                {hasRole('admin') && (
+                <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                  {lead.user ? (
+                    <Link href={route('users.edit', lead.user.id)}>{lead.user.name} (#{lead.user.id})</Link>
+                  ) : (
+                    <>-</>
+                  )}
+                    
+                </TableCell>
+                )}
+                {hasRole('admin') && (
                 <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {lead.name}
+                    
                 </TableCell>
+                )}
                 <TableCell className="px-5 py-4 sm:px-6 ">
+                  {lead.offer ? (
                   <Link href={route('offer.show', lead.offer.id)}>
                   <div className="flex flex-col">
                     <div className="w-10 h-10 overflow-hidden rounded-md">
@@ -97,6 +121,10 @@ export default function LeadTable({ leads, filters }) {
                     </div>
                   </div>
                   </Link>
+                  )  : (
+                    <>Нет</>
+                  )}
+
                 </TableCell>
                 <TableCell className="px-5 py-3 text-gray-500 text-center text-theme-sm dark:text-gray-400">
                     {lead.price} {lead.currency}

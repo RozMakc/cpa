@@ -116,6 +116,9 @@ export default function Create({categories, countries}) {
 
                         <div className="">
                             <ImageUpload setData={(file) => setData('image' , file)}/>
+                            {errors[`image`] && (
+                                <p className="text-red-500 text-sm mt-1">Загружать можно только изображения!</p>
+                            )}
                         </div>
 
                     </div>

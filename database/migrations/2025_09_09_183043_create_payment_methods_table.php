@@ -13,21 +13,19 @@ return new class extends Migration
     {
         Schema::create('payment_methods', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('payment_system_id')->nullable();
             $table->string('bank_name')->nullable();
             $table->string('bank_bik')->nullable();
             $table->string('bank_rs')->nullable();
-            $table->string('last4')->nullable();
-            $table->string('exp_month')->nullable();
-            $table->string('exp_year')->nullable();
-            $table->boolean('is_default')->default(false);
-            
-            // Шифрованные поля (если必須)
-            $table->text('encrypted_card_number')->nullable();
-            $table->text('encrypted_cvv')->nullable();
-            
             $table->timestamps();
-            $table->softDeletes();
+
+            
+            $table->foreign('payment_system_id')
+            ->references('id')
+            ->on('payment_systems')
+            ->nullOnDelete();
+
         });
     }
 

@@ -4,8 +4,10 @@ import DeleteUserForm from './Partials/DeleteUserForm';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
 import ApiForm from './Partials/ApiForm';
+import DocumentsForm from './Partials/DocumentsForm';
+import PayMethodForm from './Partials/PayMethodForm';
 
-export default function Edit({ mustVerifyEmail, status }) {
+export default function Edit({ mustVerifyEmail, status, user }) {
     return (
         <AuthenticatedLayout
             pageTitle="Настройки"
@@ -22,7 +24,11 @@ export default function Edit({ mustVerifyEmail, status }) {
                 <UpdatePasswordForm />
             </div>
             <div className="col-span-full rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
-                <ApiForm />
+                <DocumentsForm user={user}/>
+            </div>
+
+            <div className="col-span-full rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+                <PayMethodForm user={user}/>
             </div>
         </div>
         </AuthenticatedLayout>
