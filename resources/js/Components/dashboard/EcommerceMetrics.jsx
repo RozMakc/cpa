@@ -68,7 +68,7 @@ import {
           <div className="flex items-end justify-between">
             <div>
               <span className="text-sm text-gray-500 dark:text-gray-400">
-                Заказов
+                Конверсий
               </span>
               <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
               {leads_count}

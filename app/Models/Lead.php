@@ -99,8 +99,8 @@ class Lead extends Model
 
     public function __get($key)
     {
-        // Если поле есть в основной модели - возвращаем его
-        if (in_array($key, $this->fillable) || $key === 'id') {
+
+        if (in_array($key, $this->fillable) || $key === 'id' || $key === 'count' || $key === 'date') {
             return parent::__get($key);
         }
 

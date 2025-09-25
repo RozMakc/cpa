@@ -20,25 +20,25 @@ class LeadController extends Controller
                 $query->where('user_id', auth()->id());
             })
             ->latest()
-            ->paginate(50);
+            ->get();
 
-        $stats = [
-            'total' => Lead::when(!auth()->user()->hasRole('admin'), function($query) {
-                $query->where('user_id', auth()->id());
-            })->count(),
-            'new' => Lead::when(!auth()->user()->hasRole('admin'), function($query) {
-                $query->where('user_id', auth()->id());
-            })->new()->count(),
-            'hold' => Lead::when(!auth()->user()->hasRole('admin'), function($query) {
-                $query->where('user_id', auth()->id());
-            })->hold()->count(),
-            'completed' => Lead::when(!auth()->user()->hasRole('admin'), function($query) {
-                $query->where('user_id', auth()->id());
-            })->completed()->count(),
-            'canceled' => Lead::when(!auth()->user()->hasRole('admin'), function($query) {
-                $query->where('user_id', auth()->id());
-            })->canceled()->count(),
-        ];
+        $stats = Lead::selectRaw('
+                COUNT(*) as total_all,
+                SUM(CASE WHEN is_counted = 1 THEN 1 ELSE 0 END) as total,
+                SUM(CASE WHEN is_counted = 0 THEN 1 ELSE 0 END) as not_counted,
+                SUM(CASE WHEN status = "new" AND is_counted = 1 THEN 1 ELSE 0 END) as newLeads,
+                SUM(CASE WHEN status = "invited" AND is_counted = 1 THEN 1 ELSE 0 END) as invited,
+                SUM(CASE WHEN status = "accepted" AND is_counted = 1 THEN 1 ELSE 0 END) as accepted,
+                SUM(CASE WHEN status = "no_answer" AND is_counted = 1 THEN 1 ELSE 0 END) as no_answer,
+                SUM(CASE WHEN status = "self_rejected" AND is_counted = 1 THEN 1 ELSE 0 END) as self_rejected,
+                SUM(CASE WHEN status = "rejected" AND is_counted = 1 THEN 1 ELSE 0 END) as rejected,
+                SUM(CASE WHEN status = "other" AND is_counted = 1 THEN 1 ELSE 0 END) as other,
+                SUM(CASE WHEN status = "invalid_number" AND is_counted = 1 THEN 1 ELSE 0 END) as invalid_number,
+                SUM(CASE WHEN status = "duplicate" AND is_counted = 1 THEN 1 ELSE 0 END) as duplicate,
+                SUM(CASE WHEN status = "test" AND is_counted = 1 THEN 1 ELSE 0 END) as test
+            ')
+            ->first()
+            ->toArray();
 
         return Inertia::render('Leads/Index', [
             'leads' => $leads,

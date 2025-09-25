@@ -10,7 +10,7 @@ export default function StatisticsChart() {
     dates: Array(30).fill('')
   });
 
-  // Генерация дат для последних 30 дней
+  
   const generateDates = () => {
     const dates = [];
     for (let i = 29; i >= 0; i--) {
@@ -25,7 +25,6 @@ export default function StatisticsChart() {
     if (props.chartData) {
       setChartData(props.chartData);
     } else {
-      // Fallback данные если с бэкенда ничего не пришло
       setChartData({
         clicks: Array(30).fill(0).map(() => Math.floor(Math.random() * 100) + 50),
         conversions: Array(30).fill(0).map(() => Math.floor(Math.random() * 30) + 10),
@@ -130,7 +129,7 @@ export default function StatisticsChart() {
       data: chartData.clicks,
     },
     {
-      name: "Заказы",
+      name: "Конверсии",
       data: chartData.conversions,
     },
   ];

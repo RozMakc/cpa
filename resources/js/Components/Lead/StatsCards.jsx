@@ -30,6 +30,7 @@ const StatCard = ({ title, value, icon: Icon, color = 'blue', className ='' }) =
 export default function StatsCards({ stats }) {
     const {
         total = 0,
+        total_all = 0,
         newLeads = 0,
         invited = 0,
         accepted = 0,
@@ -40,6 +41,7 @@ export default function StatsCards({ stats }) {
         invalid_number = 0,
         duplicate = 0,
         test = 0,
+        not_counted = 0,
     } = stats;
 
     return (
@@ -105,6 +107,11 @@ export default function StatsCards({ stats }) {
             <StatCard
                 title="Тест"
                 value={test}
+                color="gray"
+            />
+            <StatCard
+                title="Не засчитан"
+                value={not_counted}
                 color="gray"
             />
         </div>

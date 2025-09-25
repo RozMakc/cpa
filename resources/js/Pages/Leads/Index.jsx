@@ -23,8 +23,7 @@ export default function Index({ leads, filters, stats }) {
                 <div class="flex gap-3">
                     {hasRole('admin') ? (
                         <>
-                            <QuickExportButton />
-
+                            
                             <Link 
                                 class="bg-brand-500 shadow-sm hover inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition hover:bg-brand-600 keychainify-checked" 
                                 href={route('leads.create')} data-discover="true">
