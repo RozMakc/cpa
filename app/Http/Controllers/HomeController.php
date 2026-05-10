@@ -17,6 +17,10 @@ class HomeController extends Controller
         return Inertia::render('Activation');
     }
 
+    public function offerta(){
+        return Inertia::render('Offerta');
+    }
+
     public function dashboard(){
         $users_count = 0;
         $offers_count = Offer::count();

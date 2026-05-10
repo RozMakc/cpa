@@ -13,7 +13,7 @@ import { Eye } from 'lucide-react';
 import { useRoles } from '@/hooks/useRoles';
 import PrimaryButton from '../PrimaryButton';
 import LeadStatusSelect from './LeadStatusSelect';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function LeadTable({ leads: initialLeads,  }) {
     const { hasRole, hasAnyRole } = useRoles()
@@ -21,6 +21,9 @@ export default function LeadTable({ leads: initialLeads,  }) {
     const [savingField, setSavingField] = useState(null);
     const [editingLeadId, setEditingLeadId] = useState(null);
 
+    useEffect(() => {
+      setLeads(initialLeads);
+    }, [initialLeads]);
 
     return (
         <div className="max-w-full overflow-x-auto">
@@ -85,8 +88,8 @@ export default function LeadTable({ leads: initialLeads,  }) {
 
           {/* Table Body */}
           <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-            {leads.length > 0 ? 
-            leads.map((lead) => (
+            {leads.total > 0 ? 
+            leads.data.map((lead) => (
               <TableRow key={lead.id}>
                 <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     {lead.id}

@@ -17,6 +17,7 @@ use Inertia\Inertia;
 
 
 Route::get('/activation', [HomeController::class, 'activation'])->middleware('auth')->name('activation');
+Route::get('/offerta', [HomeController::class, 'offerta'])->name('offerta');
 Route::get('/goto/{uuid}', [LinkController::class, 'redirect'])->name('link.redirect');
 
 Route::get('/exportCsv', [ExportController::class, 'export'])->name('leads.export');

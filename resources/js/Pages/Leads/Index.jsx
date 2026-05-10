@@ -1,12 +1,19 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import LeadTable from '@/Components/Lead/LeadTable';
 import StatsCards from '@/Components/Lead/StatsCards';
 import QuickExportButton from '@/Components/Lead/QuickExportButton';
 import { useRoles } from '@/hooks/useRoles';
+import { Paginate } from '@/Components/Paginate';
+import { useState } from 'react';
 
-export default function Index({ leads, filters, stats }) {
+export default function Index({ leads, filters, stats, perPage = 25 }) {
     const { hasRole, hasAnyRole } = useRoles()
+    const [localPerPage, setLocalPerPage] = useState(perPage);
+    const { url } = usePage();
+    const perPageOptions = [10, 25, 50, 100];
+
+    
     return (
         <AuthenticatedLayout
             pageTitle="Лиды"
@@ -38,7 +45,7 @@ export default function Index({ leads, filters, stats }) {
             </div>
 
             <LeadTable leads={leads} filters={filters} />
-            
+            <Paginate items={leads} perPage={perPage} />
         </div>
         </AuthenticatedLayout>
     );

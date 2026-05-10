@@ -15,14 +15,18 @@ class LeadController extends Controller
      */
     public function index(Request $request)
     {
+        
         $leads = Lead::with(['offer', 'user', 'link'])
             ->when(!auth()->user()->hasRole('admin'), function($query) {
                 $query->where('user_id', auth()->id());
             })
             ->latest()
-            ->get();
+            ->paginate(25);
 
-        $stats = Lead::selectRaw('
+        $stats = Lead::when(!auth()->user()->hasRole('admin'), function($query) {
+                    $query->where('user_id', auth()->id());
+                })
+                ->selectRaw('
                 COUNT(*) as total_all,
                 SUM(CASE WHEN is_counted = 1 THEN 1 ELSE 0 END) as total,
                 SUM(CASE WHEN is_counted = 0 THEN 1 ELSE 0 END) as not_counted,

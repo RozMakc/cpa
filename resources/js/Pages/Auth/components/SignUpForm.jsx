@@ -162,12 +162,16 @@ export default function SignUpForm() {
                   <p className="inline-block font-normal text-gray-500 dark:text-gray-400">
                     Создавая аккаунт я соглашаюсь с{" "}
                     <span className="text-gray-800 dark:text-white/90">
-                      парвилами и условиями,
+                      правилами и условиями,
                     </span>{" "}
-                    и {" "}
+                    
                     <span className="text-gray-800 dark:text-white">
                       Политикой приватности
-                    </span>
+                    </span>{" "}
+                    и {" "}
+                    <Link href={route('offerta')} className="text-gray-800 dark:text-white">
+                      Принимаю офферту
+                    </Link>
                   </p>
                 </div>
                 {/* <!-- Button --> */}
