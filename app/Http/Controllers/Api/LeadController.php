@@ -326,7 +326,7 @@ class LeadController extends Controller
 
         $validator = Validator::make($request->all(), [
             'user_id' => 'required|exists:users,id',
-            'offer_id' => 'required|exists:offers,id',
+            'offer_id' => 'nullable|exists:offers,id',
             'offer_link_id' => 'nullable|exists:offer_links,id',
             'link_id' => 'nullable|exists:links,id',
             'project_id' => 'nullable|exists:projects,id',
